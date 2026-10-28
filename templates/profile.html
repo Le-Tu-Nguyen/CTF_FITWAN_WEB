@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block content %}
+<h1>{{ g.user.username }}</h1>
+<h2>100 lượt nộp gần nhất</h2>
+<div class="table">
+    <table>
+        <tr><th>Thử thách</th><th>Kết quả</th><th>Thời gian</th></tr>
+        {% for r in rows %}
+        <tr>
+            <td>{{ r.title }}</td>
+            <td>{{ '✓ Chính xác' if r.correct else '✕ Chưa đúng' }}</td>
+            <td>{{ r.at|utc }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Bạn chưa nộp bài.</td></tr>
+        {% endfor %}
+    </table>
+</div>{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block content %}
+<section class="panel">
+    <h1>Lỗi {{ error.code }}</h1>
+    <p>{{ error.description }}</p>
+    <a href="{{ url_for('home') }}">Về trang chủ</a>
+</section>{% endblock %}

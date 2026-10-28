@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}
+<section class="hero">
+    <p class="eyebrow">CAPTURE THE FLAG / JEOPARDY</p>
+    <h1>{{ contest.title }}</h1>
+    <p>Thử sức với mật mã, web và phân tích dữ liệu.<br>Giải thử thách. Tìm flag. Vươn lên bảng xếp hạng.</p>
+    <a class="button" href="{{ url_for('challenges') }}">Bắt đầu chinh phục →</a>
+    <a class="secondary" href="{{ url_for('scoreboard') }}">Xem bảng điểm</a>
+</section>
+<div class="grid stats"><article><strong>{{ counts[0] }}</strong><span>Tài khoản</span></article><article><strong>{{ counts[1] }}</strong><span>Thử thách trong hệ thống</span></article><article><strong>{{ counts[2] }}</strong><span>Lượt giải thành công</span></article></div>
+<section class="panel"><h2>Thông tin cuộc thi</h2><p>Bắt đầu: {{ contest.start|utc }}<br>Kết thúc: {{ contest.end|utc }}</p><p>Trạng thái: <b>{% if now < contest.start %}Chưa bắt đầu{% elif now >= contest.end %}Đã kết thúc{% else %}Đang diễn ra{% endif %}</b></p><p>Thi cá nhân · Điểm cố định · Mỗi bài chỉ cộng điểm một lần. Bằng điểm: ưu tiên lượt giải cuối sớm hơn; cùng giây ưu tiên thứ tự ghi nhận solve. Flag phân biệt hoa/thường, không tự bỏ khoảng trắng.</p></section>
+<h2>Thông báo</h2>{% for n in news %}<article class="panel"><small>{{ n.at|utc }}</small><p class="pre">{{ n.body }}</p></article>{% else %}<p class="muted">Chưa có thông báo.</p>{% endfor %}{% endblock %}

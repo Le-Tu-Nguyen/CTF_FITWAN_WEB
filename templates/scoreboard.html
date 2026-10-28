@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% block content %}
+<p class="eyebrow">THE LEADERBOARD</p>
+<h1>Bảng xếp hạng</h1>
+<p class="muted">Tải lại trang để cập nhật. Quản trị viên không được tính hạng.</p>
+<div class="table">
+    <table>
+        <thead>
+            <tr>
+                <th>Hạng</th>
+                <th>Thí sinh</th>
+                <th>Điểm</th>
+                <th>Số bài</th>
+                <th>Lần giải cuối</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in rows %}
+            <tr>
+                <td>#{{ loop.index }}</td>
+                <td>{{ r.username }}</td>
+                <td class="accent">{{ r.score }}</td>
+                <td>{{ r.solved }}</td>
+                <td>{{ r.last_solve|utc }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">Chưa có thí sinh.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Quản trị cuộc thi</h1>
+<div class="admin-grid">
+    <section class="panel">
+        <h2>Lịch thi</h2>
+        <form method="post">
+            <input type="hidden" name="csrf" value="{{ csrf() }}">
+            <input type="hidden" name="action" value="contest">
+            <label>Tên cuộc thi
+                <input name="title" value="{{ contest.title }}" maxlength="100" required>
+            </label>
+            <label>Bắt đầu (Unix giây UTC)
+                <input type="number" name="start" value="{{ contest.start }}" min="0" max="4102444800" required>
+            </label>
+            <label>Kết thúc (Unix giây UTC)
+                <input type="number" name="end" value="{{ contest.end }}" min="1" max="4102444800" required>
+            </label>
+            <button>Lưu lịch thi</button>
+        </form>
+    </section>
+    <section class="panel">
+        <h2>Đăng thông báo</h2>
+        <form method="post">
+            <input type="hidden" name="csrf" value="{{ csrf() }}">
+            <input type="hidden" name="action" value="news">
+            <label>Nội dung
+                <textarea name="body" maxlength="3000" required rows="6"></textarea>
+            </label>
+            <button>Đăng thông báo</button>
+        </form>
+    </section>
+</div>
+<section class="panel">
+    <h2>{{ 'Sửa thử thách #' ~ edit.id if edit else 'Tạo thử thách' }}</h2>
+    <form method="post">
+        <input type="hidden" name="csrf" value="{{ csrf() }}">
+        <input type="hidden" name="action" value="challenge">
+        <input type="hidden" name="cid" value="{{ edit.id if edit else 0 }}">
+        <label>Tên bài
+            <input name="title" value="{{ edit.title if edit else '' }}" required maxlength="100">
+        </label>
+        <label>Danh mục
+            <input name="category" value="{{ edit.category if edit else 'Web' }}" required maxlength="40">
+        </label>
+        <label>Điểm
+            <input type="number" name="points" value="{{ edit.points if edit else 100 }}" required min="1" max="10000">
+        </label>
+        <label>Mô tả (văn bản thuần; HTML được hiển thị an toàn)
+            <textarea name="description" rows="5" required maxlength="10000">{{ edit.description if edit else '' }}</textarea>
+        </label>
+        <label>Gợi ý
+            <textarea name="hint" maxlength="1000">{{ edit.hint if edit else '' }}</textarea>
+        </label>
+        <label>Flag {{ '(để trống nếu giữ nguyên)' if edit else '' }}
+            <input type="password" name="flag" maxlength="256" autocomplete="new-password" {% if not edit %}required{% endif %}>
+        </label>
+        <label class="check">
+            <input type="checkbox" name="visible" {% if edit and edit.visible %}checked{% endif %}> Công khai bài khi đến giờ thi
+        </label>
+        <button>Lưu thử thách</button>
+        <a href="{{ url_for('admin') }}">Tạo bài mới</a>
+    </form>
+</section>
+<div class="table">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Thử thách</th>
+            <th>Điểm</th>
+            <th>Trạng thái</th>
+            <th></th>
+        </tr>
+        {% for r in rows %}
+        <tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.title }} / {{ r.category }}</td>
+            <td>{{ r.points }}</td>
+            <td>{{ 'Hiện' if r.visible else 'Ẩn' }}</td>
+            <td><a href="{{ url_for('admin',edit=r.id) }}">Chỉnh sửa</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>{% endblock %}

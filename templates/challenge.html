@@ -1,0 +1,25 @@
+{% extends 'base.html' %}{% block content %}
+<a href="{{ url_for('challenges') }}">← Danh sách thử thách</a>
+<section class="panel">
+    <span class="badge">
+        {{ row.category }} · {{ row.points }} điểm
+    </span>
+    <h1>{{ row.title }}</h1>
+    <div class="pre description">{{ row.description }}</div>
+    {% if row.hint %}
+    <details>
+        <summary>Gợi ý miễn phí</summary>
+        <p class="pre">{{ row.hint }}</p>
+    </details>
+    {% endif %}{% if solved %}
+    <p class="notice success">✓ Bạn đã giải thử thách này.</p>
+    {% elif now >= contest.end %}
+    <p>Cuộc thi đã kết thúc. Không nhận flag mới.</p>
+    {% elif g.user.admin %}
+    <p>Chế độ xem quản trị. Dùng tài khoản thí sinh riêng để thi.</p>
+    {% else %}
+    <form method="post">
+        <input type="hidden" name="csrf" value="{{ csrf() }}">
+        <label>Flag<input name="flag" placeholder="CTF{...}" maxlength="256" required autocomplete="off" spellcheck="false"></label>
+        <button>Nộp flag →</button>
+    </form>{% endif %}</section>{% endblock %}
